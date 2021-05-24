@@ -38,6 +38,11 @@ export const reducer = (state: Survey, action: any) => {
         ...state,
         active: false,
       };
+    case SurveyStep.RETURN:
+      return {
+        ...state,
+        step: state.step - 1
+      };
 
     default:
       return state;
