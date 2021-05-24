@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
-import { useForm } from "../../assets/hooks/useForm";
+import React, { useContext, useEffect } from "react";
+import { useForm } from "../../hooks/useForm";
 import { AppContext } from "../../context/survey/context";
 import { SurveyStep } from "../../context/survey/types";
 
 const PopUpStepOne: React.FC = () => {
-  const { dispatch } = useContext(AppContext);
-  const [form, handleFormChange] = useForm({ email: "", name: "" });
+  const { state, dispatch } = useContext(AppContext);
+  const [form, handleFormChange, setForm] = useForm({ email: "", name: "" });
 
   const goToStepOne = (event: any) => {
     event.preventDefault();
@@ -14,6 +14,12 @@ const PopUpStepOne: React.FC = () => {
       payload: { name: form.name, email: form.email },
     });
   };
+
+  useEffect(() => {
+    if (state.identity.email !== "" || state.identity.name !== "") {
+      setForm({ email: state.identity.email, name: state.identity.name });
+    }
+  }, [setForm, state.identity.email, state.identity.name]);
 
   return (
     <div className="pop-up__overlay">

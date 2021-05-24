@@ -1,11 +1,11 @@
-import React, { useContext, useState } from "react";
-import { useForm } from "../../assets/hooks/useForm";
+import React, { useContext, useState, useEffect } from "react";
+import { useForm } from "../../hooks/useForm";
 import { AppContext } from "../../context/survey/context";
 import { SurveyStep } from "../../context/survey/types";
 
 const StepThree: React.FC = () => {
-  const { dispatch } = useContext(AppContext);
-  const [form, handleFormChange] = useForm({
+  const { state, dispatch } = useContext(AppContext);
+  const [form, handleFormChange, setForm] = useForm({
     book: "",
   });
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
@@ -21,6 +21,11 @@ const StepThree: React.FC = () => {
     "Violet",
   ];
 
+  useEffect(() => {
+    if (state.favorites.book !== "" || state.favorites.colors !== []) {
+      setForm({ book: state.favorites.book, colors: state.favorites.colors });
+    }
+  }, [setForm, state.favorites.book, state.favorites.colors]);
 
   const onChangeCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
     const colors = selectedColors;
@@ -106,6 +111,15 @@ const StepThree: React.FC = () => {
             </div>
 
             <div className="pop-up__footer">
+              <button
+                onClick={() =>
+                  dispatch({
+                    type: SurveyStep.RETURN,
+                  })
+                }
+              >
+                Previous
+              </button>
               <button type="submit" disabled={invalidCheckbox}>
                 Next
               </button>

@@ -46,6 +46,15 @@ const StepFour: React.FC = () => {
             </div>
           </div>
           <div>
+            <button
+              onClick={() =>
+                dispatch({
+                  type: SurveyStep.RETURN,
+                })
+              }
+            >
+              Previous
+            </button>
             <button onClick={() => goToStepThree()}> Submit </button>
           </div>
         </div>

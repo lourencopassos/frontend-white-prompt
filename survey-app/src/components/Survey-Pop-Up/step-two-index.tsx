@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
-import { useForm } from "../../assets/hooks/useForm";
+import React, { useContext, useEffect } from "react";
+import { useForm } from "../../hooks/useForm";
 import { AppContext } from "../../context/survey/context";
 import { SurveyStep } from "../../context/survey/types";
 
 const StepTwo: React.FC = () => {
-  const { dispatch } = useContext(AppContext);
-  const [form, handleFormChange] = useForm({ age: 0, gender: "" });
+  const { state, dispatch } = useContext(AppContext);
+  const [form, handleFormChange, setForm] = useForm({ age: 0, gender: "" });
 
   const goToStepThree = (event: any) => {
     event.preventDefault();
@@ -14,6 +14,12 @@ const StepTwo: React.FC = () => {
       payload: { age: form.age, gender: form.gender },
     });
   };
+
+  useEffect(() => {
+    if (state.details.age !== 0 || state.details.gender !== "") {
+      setForm({ age: state.details.age, name: state.details.gender });
+    }
+  }, [setForm, state.details.age, state.details.gender]);
 
   const genders = ["Male", "Female", "Other"];
   const ages = [...Array(99).keys()].slice(18);
@@ -73,6 +79,15 @@ const StepTwo: React.FC = () => {
               })}
             </div>
             <div className="pop-up__footer">
+              <button
+                onClick={() =>
+                  dispatch({
+                    type: SurveyStep.RETURN,
+                  })
+                }
+              >
+                Previous
+              </button>
               <button type="submit"> Next </button>
             </div>
           </form>
