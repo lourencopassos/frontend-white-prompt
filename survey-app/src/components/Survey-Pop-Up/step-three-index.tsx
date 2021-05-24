@@ -9,6 +9,7 @@ const StepThree: React.FC = () => {
     book: "",
   });
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
+  const [invalidCheckbox, setInvalidCheckbox] = useState<boolean>(true);
 
   const colors = [
     "Blue",
@@ -19,6 +20,7 @@ const StepThree: React.FC = () => {
     "Indigo",
     "Violet",
   ];
+
 
   const onChangeCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
     const colors = selectedColors;
@@ -31,9 +33,21 @@ const StepThree: React.FC = () => {
       colors.splice(index, 1);
     }
     setSelectedColors(colors);
+
+    if (selectedColors.length > 0) {
+      setInvalidCheckbox(false);
+    }
   };
 
-  const goToStepFour = () => {
+  const checkIfValid = () => {
+    if (selectedColors.length > 0) {
+      setInvalidCheckbox(false);
+    }
+    setInvalidCheckbox(true);
+  };
+
+  const goToStepFour = (event: any) => {
+    event?.preventDefault();
     dispatch({
       type: SurveyStep.GO_TO_STEP_4,
       payload: { book: form.book, colors: selectedColors },
@@ -54,37 +68,49 @@ const StepThree: React.FC = () => {
         />
         <h2>Favourite Colors and Book</h2>
         <div className="pop-up__content-form">
-          <label>Favorite Book</label>
-          <input value={form.book} onChange={handleFormChange} name="book" />
-        </div>
-        <div>
-          <label>Select your favorite color</label>
-          <div className="pop-up__content-form-genders">
-            {colors.map((color, index) => {
-              return (
-                <div key={index}>
-                  <input
-                    type="checkbox"
-                    id={color}
-                    value={color}
-                    name="colors"
-                    onChange={onChangeCheckbox}
-                    key={index}
-                  />
-                  <label
-                    htmlFor={color}
-                    style={{ color, fontWeight: "bolder" }}
-                    key={color}
-                  >
-                    {color}
-                  </label>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-        <div className="pop-up__footer">
-          <button onClick={() => goToStepFour()}> Next </button>
+          <form onSubmit={goToStepFour}>
+            <label>Favorite Book</label>
+            <input
+              value={form.book}
+              onChange={handleFormChange}
+              name="book"
+              required
+              minLength={2}
+            />
+            <div>
+              <label>Select your favorite color</label>
+              <div className="pop-up__content-form-genders">
+                {colors.map((color, index) => {
+                  return (
+                    <div key={index}>
+                      <input
+                        type="checkbox"
+                        id={color}
+                        value={color}
+                        name="colors"
+                        onChange={onChangeCheckbox}
+                        key={index}
+                        onClick={checkIfValid}
+                      />
+                      <label
+                        htmlFor={color}
+                        style={{ color, fontWeight: "bolder" }}
+                        key={color}
+                      >
+                        {color}
+                      </label>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="pop-up__footer">
+              <button type="submit" disabled={invalidCheckbox}>
+                Next
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

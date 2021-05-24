@@ -7,7 +7,8 @@ const StepTwo: React.FC = () => {
   const { dispatch } = useContext(AppContext);
   const [form, handleFormChange] = useForm({ age: 0, gender: "" });
 
-  const goToStepThree = () => {
+  const goToStepThree = (event: any) => {
+    event.preventDefault();
     dispatch({
       type: SurveyStep.GO_TO_STEP_3,
       payload: { age: form.age, gender: form.gender },
@@ -31,42 +32,50 @@ const StepTwo: React.FC = () => {
         />
         <h2>Favourite Colors and Book Survey</h2>
         <div className="pop-up__content-form">
-          <label>Age:</label>
-          <select name="age" value={form.age} onChange={handleFormChange}>
-            <option defaultValue="" key="default">
-              Select the age
-            </option>
-            {ages.map((age, index) => {
-              return (
-                <option key={index} value={age}>
-                  {age}
-                </option>
-              );
-            })}
-          </select>
-          <div className="pop-up__content-form-genders">
-            <label htmlFor="gender">Gender</label>
-            {genders.map((gender, index) => {
-              return (
-                <div key={index}>
-                  <input
-                    type="radio"
-                    id={gender}
-                    value={gender}
-                    name="gender"
-                    key={gender}
-                    onChange={handleFormChange}
-                  />
-                  <label key={index} htmlFor={gender}>
-                    {gender}
-                  </label>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-        <div className="pop-up__footer">
-          <button onClick={() => goToStepThree()}> Next </button>
+          <form onSubmit={goToStepThree}>
+            <label htmlFor="age">Age:</label>
+            <select
+              required
+              name="age"
+              value={form.age}
+              onChange={handleFormChange}
+            >
+              <option key="default" value="">
+                Select the age
+              </option>
+              {ages.map((age, index) => {
+                return (
+                  <option key={index} value={age}>
+                    {age}
+                  </option>
+                );
+              })}
+            </select>
+            <div className="pop-up__content-form-genders">
+              <label htmlFor="gender">Gender</label>
+              {genders.map((gender, index) => {
+                return (
+                  <div key={index}>
+                    <input
+                      type="radio"
+                      id={gender}
+                      value={gender}
+                      name="gender"
+                      key={gender}
+                      onChange={handleFormChange}
+                      required
+                    />
+                    <label key={index} htmlFor={gender}>
+                      {gender}
+                    </label>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="pop-up__footer">
+              <button type="submit"> Next </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
