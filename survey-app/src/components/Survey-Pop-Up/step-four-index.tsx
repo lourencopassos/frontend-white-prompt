@@ -1,26 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { AppContext } from "../../context/survey/context";
-import { Survey, SurveyStep } from "../../context/survey/types";
+import { SurveyStep } from "../../context/survey/types";
 
 const StepFour: React.FC = () => {
   const { state, dispatch } = useContext(AppContext);
-  const [unsubmittedSurvey, setUnsubmittedSurvey] = useState<Survey>();
 
   const { identity, details, favorites } = state;
-
-  useEffect(() => {
-    setUnsubmittedSurvey(state);
-    localStorage.setItem("survey", JSON.stringify(state));
-  }, [state]);
-
-  useEffect(() => {
-    const survey = localStorage.getItem("survey");
-
-    if (survey) {
-      const parsedSurvey = JSON.parse(survey);
-      console.log(parsedSurvey);
-    }
-  }, []);
 
   const goToStepThree = () => {
     dispatch({
@@ -40,8 +25,8 @@ const StepFour: React.FC = () => {
         <div>
           <h2>Favourite Colors and Book Survey</h2>
           <div>
-            <p>Your name: {identity.name}</p>
-            <p>Your email:{identity.email}</p>
+            {identity.name && <p>Your name: {identity.name}</p>}
+            {identity.email && <p>Your email:{identity.email}</p>}
           </div>
           <div>
             <p>Your age: {details.age}</p>
@@ -61,6 +46,15 @@ const StepFour: React.FC = () => {
             </div>
           </div>
           <div>
+            <button
+              onClick={() =>
+                dispatch({
+                  type: SurveyStep.RETURN,
+                })
+              }
+            >
+              Previous
+            </button>
             <button onClick={() => goToStepThree()}> Submit </button>
           </div>
         </div>

@@ -40,7 +40,8 @@ export enum SurveyStep {
   GO_TO_STEP_3 = 'GO_TO_STEP_3',
   GO_TO_STEP_4 = 'GO_TO_STEP_4',
   FINISH = 'FINISH',
-  CLOSE = 'CLOSE'
+  CLOSE = 'CLOSE',
+  RETURN = 'RETURN'
 }
 
 export interface Survey {
@@ -85,6 +86,7 @@ export type SurveyPayloadless = {
   [SurveyStep.OPEN]: undefined;
   [SurveyStep.FINISH]: undefined;
   [SurveyStep.CLOSE]: undefined;
+  [SurveyStep.RETURN]: undefined;
 }
 
 export type SurveyActions = ActionMap<SurveyPayload>[keyof ActionMap<SurveyPayload>];
