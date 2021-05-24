@@ -75,6 +75,10 @@ code {
   display: flex;
   justify-content: flex-end;
   margin-top: 25px;
+
+  button {
+    margin: 0 8px;
+  }
 }
 .pop-up__content .close-pop-up {
   transition: all 0.2s ease;
